@@ -52,9 +52,9 @@ st.markdown("""
 # 添加 SEO 相关的元标签
 st.markdown("""
 <!-- SEO Meta Tags -->
-<meta name="description" content="Bilibili 视频下载器 - 轻松下载您喜爱的 Bilibili 视频">
-<meta name="keywords" content="Bilibili, 视频下载, 在线工具">
-<meta name="author" content="Your Name">
+<meta name="description" content="Bilibili Video Downloader - 轻松下载您喜爱的 Bilibili 视频 | Easily download your favorite Bilibili videos">
+<meta name="keywords" content="Bilibili, 视频下载, 在线工具, video downloader, online tool, 哔哩哔哩, bilibili downloader">
+<meta name="author" content="rwecho">
 """, unsafe_allow_html=True)
 
 st.title("Bilibili 视频下载器")
@@ -85,6 +85,10 @@ if st.button("下载视频"):
                 logging.error(f"下载错误: {error}")
             elif file_path:
                 st.success(f"{short_name} 下载完成！")
+                # After the download process
+                st.subheader("Downloaded Files:")
+                for file in os.listdir(downloads_dir):
+                    st.text(file)
                 if os.path.exists(file_path):
                     with open(file_path, "rb") as file:
                         st.download_button(
@@ -95,6 +99,7 @@ if st.button("下载视频"):
                             key=f"download_{i}"
                         )
                 else:
+
                     st.error(f"文件不存在: {file_path}")
             else:
                 st.warning(f"{short_name} 下载完成，但无法生成下载链接。")
@@ -103,7 +108,6 @@ if st.button("下载视频"):
         st.warning("请输入有效的URL或BV号。")
 
 st.markdown("---")
-
 
 # 添加 cookie.txt 文件上传功能
 uploaded_file = st.file_uploader("上传 cookie.txt 文件（可选）", type="txt")
@@ -124,6 +128,6 @@ if 'cookies_path' in locals() and cookies_path != 'cookie.txt':
 # 添加页脚
 st.markdown("""
 <div style="background-color:#1f77b4;padding:10px;border-radius:10px;margin-top:20px">
-    <p style="color:white;text-align:center;">© 2023 Bilibili 视频下载器. 保留所有权利。</p>
+    <p style="color:white;text-align:center;">© 2024 Bilibili 视频下载器. 保留所有权利。</p>
 </div>
 """, unsafe_allow_html=True)
