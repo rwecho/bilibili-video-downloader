@@ -16,8 +16,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'Get Help': 'https://www.example.com/help',
-        'Report a bug': "https://www.example.com/bug",
+        'Home': 'https://bilibili-downloader.streamlit.app/',
+        'Get Help': 'https://github.com/rwecho/bilibili-video-downloader',
+        'Report a bug': "https://github.com/rwecho/bilibili-video-downloader/issues",
         'About': "# Bilibili 视频下载器\n这是一个简单的 Bilibili 视频下载工具。"
     }
 )
