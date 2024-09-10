@@ -90,6 +90,9 @@ if st.button("下载视频"):
                 video_parts = sorted([f for f in os.listdir(
                     dir_path) if f.startswith(base_name) and f.endswith('.mp4')])
 
+                for part in video_parts:
+                    st.info(f"视频片段：{part}")
+
                 if len(video_parts) > 1:
                     merged_file_path = os.path.join(
                         dir_path, f"{base_name}_merged.mp4")
