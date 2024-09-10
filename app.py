@@ -7,7 +7,17 @@ import tempfile
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 
 # 配置日志
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def merge_video_parts(video_parts, output_path):
+    clips = [VideoFileClip(part) for part in video_parts]
+    final_clip = concatenate_videoclips(clips)
+    final_clip.write_videofile(output_path)
+    for clip in clips:
+        clip.close()
+
 
 # 设置页面配置
 st.set_page_config(
@@ -66,21 +76,25 @@ urls = st.text_area("请输入Bilibili视频URL或BV号（每行一个）:")
 if st.button("下载视频"):
     if urls:
         url_list = [url.strip() for url in urls.split('\n') if url.strip()]
-        url_list = [f"https://www.bilibili.com/video/{url}" if not url.startswith('http') else url for url in url_list]
-        
+        url_list = [f"https://www.bilibili.com/video/{url}" if not url.startswith(
+            'http') else url for url in url_list]
+
         st.info("开始下载视频...")
-        
+
         results = download_videos(url_list, cookies_path)
-        
+
         for i, (file_path, error) in enumerate(results):
             if file_path and not error:
                 dir_path = os.path.dirname(file_path)
                 base_name = os.path.splitext(os.path.basename(file_path))[0]
-                video_parts = sorted([f for f in os.listdir(dir_path) if f.startswith(base_name) and f.endswith('.mp4')])
-                
+                video_parts = sorted([f for f in os.listdir(
+                    dir_path) if f.startswith(base_name) and f.endswith('.mp4')])
+
                 if len(video_parts) > 1:
-                    merged_file_path = os.path.join(dir_path, f"{base_name}_merged.mp4")
-                    merge_video_parts([os.path.join(dir_path, part) for part in video_parts], merged_file_path)
+                    merged_file_path = os.path.join(
+                        dir_path, f"{base_name}_merged.mp4")
+                    merge_video_parts([os.path.join(dir_path, part)
+                                      for part in video_parts], merged_file_path)
                     file_path = merged_file_path
                     st.success(f"视频片段已合并：{os.path.basename(file_path)}")
 
@@ -143,10 +157,3 @@ st.markdown("""
     <p style="color:white;text-align:center;">© 2024 Bilibili 视频下载器. 保留所有权利。</p>
 </div>
 """, unsafe_allow_html=True)
-
-def merge_video_parts(video_parts, output_path):
-    clips = [VideoFileClip(part) for part in video_parts]
-    final_clip = concatenate_videoclips(clips)
-    final_clip.write_videofile(output_path)
-    for clip in clips:
-        clip.close()
